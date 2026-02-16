@@ -1,30 +1,43 @@
-<h1>Articles listing Page</h1>
+<h1 class="text-center mt-4">Listing All Articles</h1>
 
+<div class="container">
+  <% @articles.each do |article| %>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        
+        <div class="card text-center shadow-sm mb-4 bg-white rounded">
+          
+          <div class="card-header font-italic">
+            <% if article.user %>
+              by <%= article.user.username %>
+            <% else %>
+              by Unknown
+            <% end %>
+          </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th colspan = "3">Actions<th>
-        </tr>
-    </thead>
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= link_to article.title, article_path(article), class: "text-success text-decoration-none" %>
+            </h5>
+            <p class="card-text">
+              <%= truncate(article.description, length: 100) %>
+            </p>
 
-    <tbody>
-        <% @articles.each do |article| %>
-            <tr>
-                <td><%= article.title %><td>
-                <td><%= article.description %></td>
-                <td><%= link_to 'show', article_path(article) %></td>
-                <td><%= link_to 'edit', edit_article_path(article)%></td>
-                <td>
-                  <%= link_to 'Delete', article_path(article),
-                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-                </td>
+            <%= link_to "View", article_path(article), class: "btn btn-outline-success btn-sm" %>
+            <%= link_to "Edit", edit_article_path(article), class: "btn btn-outline-info btn-sm" %>
+            <%= link_to "Delete", article_path(article), 
+                        data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, 
+                        class: "btn btn-outline-danger btn-sm" %>
+          </div>
 
-            </tr>
-        <% end %>
-    </tbody>
-</table>
+          <div class="card-footer text-muted">
+            Created <%= time_ago_in_words(article.created_at) %> ago,
+            edited <%= time_ago_in_words(article.updated_at) %> ago
+          </div>
 
-<p><%= link_to 'create new article', new_article_path %></p>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+</div>
