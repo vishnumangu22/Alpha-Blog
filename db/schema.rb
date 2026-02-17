@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_16_043124) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_17_050732) do
   create_table "articles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -18,6 +18,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_16_043124) do
     t.text "description"
     t.datetime "crated_at"
     t.datetime "updtaed_at"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_articles_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -27,4 +29,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_16_043124) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
   end
+
+  add_foreign_key "articles", "users"
 end
