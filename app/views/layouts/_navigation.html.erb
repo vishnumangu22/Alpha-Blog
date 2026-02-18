@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-light">
   <%= link_to "ALPHA BLOG", root_path,
-              class: "navbar-brand fw-bold",
+              class: "navbar-brand fw-bold text-white",
               id: "logo" %>
 
   <button class="navbar-toggler"
@@ -24,42 +24,82 @@
                     class: "nav-link text-white" %>
       </li>
 
+      <!-- Articles Dropdown -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle text-white"
            href="#"
-           id="navbarDropdown"
+           id="articlesDropdown"
            role="button"
            data-bs-toggle="dropdown"
            aria-expanded="false">
           Articles
         </a>
 
-        <ul class="dropdown-menu">
-          <li>
-            <%= link_to "Create new article",
-                        new_article_path,
-                        class: "dropdown-item" %>
-          </li>
+        <ul class="dropdown-menu bg-dark border-light">
+
+          <% if logged_in? %>
+            <li>
+              <%= link_to "Create new article",
+                          new_article_path,
+                          class: "dropdown-item text-white bg-dark" %>
+            </li>
+          <% end %>
+
           <li>
             <%= link_to "View articles",
                         articles_path,
-                        class: "dropdown-item" %>
+                        class: "dropdown-item text-white bg-dark" %>
           </li>
-          <li><hr class="dropdown-divider"></li>
+
+          <li><hr class="dropdown-divider bg-light"></li>
+
           <li>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item text-white bg-dark" href="#">
+              Something else here
+            </a>
           </li>
         </ul>
       </li>
 
       <% if logged_in? %>
 
-        <li class="nav-item">
-          <%= link_to current_user.username,
-                      user_path(current_user),
-                      class: "nav-link text-white fw-semibold" %>
+        <!-- Profile Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white fw-semibold"
+             href="#"
+             id="profileDropdown"
+             role="button"
+             data-bs-toggle="dropdown"
+             aria-expanded="false">
+            <%= "(Admin)"if current_user.admin? %> Profile [<%= current_user.username %>]
+          </a>
+
+          <ul class="dropdown-menu bg-dark border-light">
+
+            <li>
+              <%= link_to "View your profile",
+                          user_path(current_user),
+                          class: "dropdown-item text-white bg-dark" %>
+            </li>
+
+            <li>
+              <%= link_to "Edit your profile",
+                          edit_user_path(current_user),
+                          class: "dropdown-item text-white bg-dark" %>
+            </li>
+
+            <li>
+              <%= link_to "Delete profile",
+                          user_path(current_user),
+                          class: "dropdown-item text-danger",
+                          method: :delete,
+                          data: { confirm: "Are you sure?" } %>
+            </li>
+
+          </ul>
         </li>
 
+        <!-- Logout -->
         <li class="nav-item">
           <%= button_to "Logout",
                         logout_path,
@@ -88,11 +128,11 @@
 
     <!-- Right Side -->
     <form class="d-flex">
-      <input class="form-control me-2"
+      <input class="form-control me-2 bg-dark text-white border-light"
              type="search"
              placeholder="Search"
              aria-label="Search">
-      <button class="btn btn-light"
+      <button class="btn btn-outline-light"
               type="submit">
         Search
       </button>

@@ -1,6 +1,8 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [ :show, :edit, :update, :destroy ]
-  before_action :require_user, only: [ :new, :create, :edit, :update, :destroy ]
+   # before_action :require_user, only: [ :new, :create, :edit, :update, :destroy ]
+   before_action :require_user, except: [ :show, :index ]
+  before_action :require_same_user, only: [ :edit, :update, :destroy ]
 
   def index
     @articles = Article.paginate(page: params[:page], per_page: 5)
@@ -59,6 +61,13 @@ class ArticlesController < ApplicationController
     unless logged_in?
       flash[:alert] = "You must be logged in to perform that action"
       redirect_to login_path
+    end
+  end
+
+  def require_same_user
+    if current_user != @article.user && !current_user.admin?
+      flash[:alert] = "You can only edit or delete your own article"
+      redirect_to @article
     end
   end
 end
